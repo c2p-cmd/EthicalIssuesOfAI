@@ -2,7 +2,7 @@
 
 An analysis of the Bank Marketing Dataset from UCI Machine Learning Repository, focusing on identifying and understanding bias and fairness issues in AI/ML models.
 
-## Demo Link: <>
+## Demo Link: <https://c2p-cmd.github.io/EthicalIssuesOfAI/>
 
 ## 📋 Project Overview
 
