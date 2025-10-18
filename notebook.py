@@ -93,7 +93,7 @@ def _(mo):
 
 @app.cell
 def _(pd):
-    df = pd.read_csv("bank_marketing_data.csv")
+    df = pd.read_csv("https://raw.githubusercontent.com/c2p-cmd/EthicalIssuesOfAI/refs/heads/main/bank_marketing_data.csv")
     df
     return (df,)
 
