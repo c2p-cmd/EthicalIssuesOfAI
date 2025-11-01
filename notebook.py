@@ -100,9 +100,7 @@ def _(pd):
 
 @app.cell
 def _(df, mo):
-    mo.md(
-        f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns."""
-    )
+    mo.md(f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns.""")
     return
 
 
@@ -173,9 +171,7 @@ def _(cleaned_df, pd):
 
 @app.cell
 def _(cleaned_df, mo):
-    mo.md(
-        f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values."""
-    )
+    mo.md(f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values.""")
     return
 
 
@@ -499,17 +495,13 @@ def _(plt, sns, y_test, y_train):
 
 @app.cell
 def _(mo):
-    mo.md(
-        """#### **Observation**: Both Training and testing label has 88% no and 12% yes labels"""
-    )
+    mo.md("""#### **Observation**: Both Training and testing label has 88% no and 12% yes labels""")
     return
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        """### Due to data imbalance in target we need to compute class weights for model to perform well"""
-    )
+    mo.md("""### Due to data imbalance in target we need to compute class weights for model to perform well""")
     return
 
 
@@ -693,7 +685,8 @@ def _(X_test, mo, pd, predictions):
 
 @app.cell(hide_code=True)
 def _(mo):
-    mo.md("""
+    mo.md(
+        """
     ## Observations on Disparate Impact Analysis
 
     ### Disparate Impact on Marital Status
@@ -715,7 +708,8 @@ def _(mo):
     - The observed disparate impact could lead to reinforcing existing inequalities in financial opportunity.
     - Financial institutions might inadvertently target marketing campaigns toward already privileged groups (single individuals or those with tertiary education).
     - This could result in less access to beneficial financial products for married individuals or those with lower educational attainment.
-    """)
+    """
+    )
     return
 
 
