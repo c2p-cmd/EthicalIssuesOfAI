@@ -1,7 +1,29 @@
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#     "matplotlib==3.10.7",
+#     "numpy==2.3.4",
+#     "pandas==2.3.3",
+#     "plotly==6.4.0",
+#     "ruff==0.14.4",
+#     "scikit-learn==1.7.2",
+#     "seaborn==0.13.2",
+# ]
+# ///
+
 import marimo
 
 __generated_with = "0.17.0"
-app = marimo.App(width="full")
+app = marimo.App(
+    width="full",
+    app_title="Bank Marketing Dataset Ethical Analysis",
+)
+
+
+@app.cell
+def _(mo):
+    mo.md("""# Bank Marketing Dataset Ethical Analysis""")
+    return
 
 
 @app.cell
@@ -19,22 +41,16 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md("""# Bank Marketing Dataset Ethical Analysis""")
-    return
-
-
-@app.cell
-def _(mo):
     mo.md(
         """
     ## Introduction
-    * This notebook is assessment for Ethical Issues of AI.
-    * This notebook uses the Bank Marketing Dataset from the UCI Machine Learning Repository. <https://archive.ics.uci.edu/dataset/222/bank+marketing>
+    * This notebook is assessment for **M515 - Ethical Issues of AI**.
+    * This notebook uses the **Bank Marketing Dataset** from the **UCI Machine Learning Repository**. <https://archive.ics.uci.edu/dataset/222/bank+marketing>
     * The dataset contains information about direct marketing campaigns of a Portuguese banking institution.
     * The goal is to predict whether a client will subscribe to a term deposit based on various features and understand the issues with respect to bias and fairness in AI models.
 
     ## Problem Statement
-    * To analyze the Bank Marketing Dataset for potential ethical issues, including bias and fairness in AI models.
+    * To analyze the **Bank Marketing Dataset** for potential ethical issues, including bias and fairness in AI models.
     * To identify any disparities in model performance across different demographic groups.
     """
     )
@@ -93,14 +109,18 @@ def _(mo):
 
 @app.cell
 def _(pd):
-    df = pd.read_csv("https://raw.githubusercontent.com/c2p-cmd/EthicalIssuesOfAI/refs/heads/main/bank_marketing_data.csv")
+    df = pd.read_csv(
+        "https://raw.githubusercontent.com/c2p-cmd/EthicalIssuesOfAI/refs/heads/main/bank_marketing_data.csv"
+    )
     df
     return (df,)
 
 
 @app.cell
 def _(df, mo):
-    mo.md(f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns.""")
+    mo.md(
+        f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns."""
+    )
     return
 
 
@@ -171,7 +191,9 @@ def _(cleaned_df, pd):
 
 @app.cell
 def _(cleaned_df, mo):
-    mo.md(f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values.""")
+    mo.md(
+        f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values."""
+    )
     return
 
 
@@ -365,7 +387,7 @@ def _(cleaned_df, plt, sensitive_attributes, sns):
     return
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         """
@@ -426,7 +448,11 @@ def _(cleaned_df, train_test_split):
     y = cleaned_df["y"]
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=19, stratify=X["loan"]
+        X,
+        y,
+        test_size=0.2,
+        random_state=19,
+        stratify=X["loan"],
     )
     return X_test, X_train, y, y_test, y_train
 
@@ -495,18 +521,22 @@ def _(plt, sns, y_test, y_train):
 
 @app.cell
 def _(mo):
-    mo.md("""#### **Observation**: Both Training and testing label has 88% no and 12% yes labels""")
+    mo.md(
+        """#### **Observation**: Both Training and testing label has 88% no and 12% yes labels"""
+    )
     return
 
 
 @app.cell
 def _(mo):
-    mo.md("""### Due to data imbalance in target we need to compute class weights for model to perform well""")
+    mo.md(
+        """### Due to data imbalance in target we need to compute class weights for model to perform well"""
+    )
     return
 
 
 @app.cell
-def _(np, y, y_train):
+def _(mo, np, y, y_train):
     from sklearn.utils import compute_class_weight
 
     class_names = np.unique(y)
@@ -514,11 +544,13 @@ def _(np, y, y_train):
         zip(
             class_names,
             compute_class_weight(
-                class_weight="balanced", y=y_train, classes=class_names
+                class_weight="balanced",
+                y=y_train,
+                classes=class_names,
             ),
         )
     )
-    weights
+    mo.ui.table(weights, label="Class Weights for Imbalanced Data")
     return (weights,)
 
 
@@ -545,7 +577,6 @@ def _(categorical_features, numerical_features, weights):
                 "classifier",
                 SVC(
                     random_state=19,
-                    kernel="rbf",
                     # gamma="auto",
                     class_weight=weights,
                 ),
@@ -630,7 +661,13 @@ def _(mo, pd, predictions, y_test):
 
     for _name, _preds in _bar:
         _reports.append(
-            pd.DataFrame(classification_report(y_test, _preds, output_dict=True))
+            pd.DataFrame(
+                classification_report(
+                    y_test,
+                    _preds,
+                    output_dict=True,
+                )
+            )
         )
 
     mo.vstack(_reports)
@@ -659,14 +696,16 @@ def _(X_test, mo, pd, predictions):
         disparity["Proportion No"] = (disparity["no"] / disparity["Total"]) * 100
         disparity["Proportion Yes"] = (disparity["yes"] / disparity["Total"]) * 100
         return mo.ui.table(
-            disparity, label=f"## Disparate Impact on **{feature}** for **{name}**"
+            disparity,
+            label=f"## Disparate Impact on **{feature}** for **{name}**",
         )
 
 
     _tables = []
 
     for _name, _preds in zip(
-        ["SVM", "Random Forest", "Logistic Regression"], predictions
+        ["SVM", "Random Forest", "Logistic Regression"],
+        predictions,
     ):
         _tables.append(
             mo.hstack(
