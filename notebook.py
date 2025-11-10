@@ -22,7 +22,19 @@ app = marimo.App(
 
 @app.cell
 def _(mo):
-    mo.md("""# Bank Marketing Dataset Ethical Analysis""")
+    mo.vstack(
+        [
+            mo.md("# Bank Marketing Dataset Ethical Analysis"),
+            mo.image(
+                src="https://raw.githubusercontent.com/c2p-cmd/EthicalIssuesOfAI/main/cover.png",
+                alt="Cover Image for Ethics in AI and Banking",
+                width=360,
+                height=360,
+                rounded=True,
+                caption="Cover Image for Ethics in AI and Banking",
+            ),
+        ]
+    )
     return
 
 
@@ -45,9 +57,13 @@ def _(mo):
         """
     ## Introduction
     * This notebook is assessment for **M515 - Ethical Issues of AI**.
-    * This notebook uses the **Bank Marketing Dataset** from the **UCI Machine Learning Repository**. <https://archive.ics.uci.edu/dataset/222/bank+marketing>
+    * This notebook uses the **Bank Marketing Dataset** from the **UCI Machine Learning Repository**. 
     * The dataset contains information about direct marketing campaigns of a Portuguese banking institution.
     * The goal is to predict whether a client will subscribe to a term deposit based on various features and understand the issues with respect to bias and fairness in AI models.
+
+    ## GitHub Repository & Dataset:
+    * Link: <https://github.com/c2p-cmd/EthicalIssuesOfAI>
+    * Dataset: <https://archive.ics.uci.edu/dataset/222/bank+marketing>
 
     ## Problem Statement
     * To analyze the **Bank Marketing Dataset** for potential ethical issues, including bias and fairness in AI models.
@@ -118,9 +134,7 @@ def _(pd):
 
 @app.cell
 def _(df, mo):
-    mo.md(
-        f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns."""
-    )
+    mo.md(f"""### **Observation** The dataset has {len(df)} samples with {len(df.columns)} columns.""")
     return
 
 
@@ -132,7 +146,7 @@ def _(df):
 
 @app.cell
 def _(df, pd):
-    pd.DataFrame(df.isnull().sum()).T
+    pd.DataFrame(df.isnull().sum(), columns=["Count"]).T
     return
 
 
@@ -191,21 +205,13 @@ def _(cleaned_df, pd):
 
 @app.cell
 def _(cleaned_df, mo):
-    mo.md(
-        f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values."""
-    )
+    mo.md(f"""### **Observation** After cleaning, the dataset has {len(cleaned_df)} samples with {len(cleaned_df.columns)} columns and no missing values.""")
     return
 
 
 @app.cell
 def _(mo):
     mo.md("""## Exploratory Data Analysis (EDA)""")
-    return
-
-
-@app.cell
-def _(cleaned_df):
-    cleaned_df.columns
     return
 
 
@@ -452,7 +458,7 @@ def _(cleaned_df, train_test_split):
         y,
         test_size=0.2,
         random_state=19,
-        stratify=X["loan"],
+        stratify=y,
     )
     return X_test, X_train, y, y_test, y_train
 
@@ -521,17 +527,13 @@ def _(plt, sns, y_test, y_train):
 
 @app.cell
 def _(mo):
-    mo.md(
-        """#### **Observation**: Both Training and testing label has 88% no and 12% yes labels"""
-    )
+    mo.md("""#### **Observation**: Both Training and testing label has 88% no and 12% yes labels""")
     return
 
 
 @app.cell
 def _(mo):
-    mo.md(
-        """### Due to data imbalance in target we need to compute class weights for model to perform well"""
-    )
+    mo.md("""### Due to data imbalance in target we need to compute class weights for model to perform well""")
     return
 
 
